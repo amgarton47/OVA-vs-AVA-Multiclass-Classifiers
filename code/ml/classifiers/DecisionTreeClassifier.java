@@ -231,7 +231,7 @@ public class DecisionTreeClassifier implements Classifier {
 	}
 
 	/**
-	 * A container class to allow us to return multiple values when calculting the
+	 * A container class to allow us to return multiple values when calculating the
 	 * majority label from a collection of data.
 	 * 
 	 * @author dkauchak
@@ -250,8 +250,7 @@ public class DecisionTreeClassifier implements Classifier {
 	}
 
 	public static void main(String[] args) {
-		DataSet data = new DataSet("/Users/aidangarton/Desktop/Java/assign5-starter/data/wines.train",
-				DataSet.TEXTFILE);
+		DataSet data = new DataSet("../assign5-starter/data/wines.train", DataSet.TEXTFILE);
 //		CrossValidationSet cvs = new CrossValidationSet(data, 10);
 //		DecisionTreeClassifier dt = new DecisionTreeClassifier();
 //		dt.setDepthLimit(5);
