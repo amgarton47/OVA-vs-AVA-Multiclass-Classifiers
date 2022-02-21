@@ -19,10 +19,21 @@ public class OVAClassifier implements Classifier {
 	private ClassifierFactory factory;
 	private ArrayList<Classifier> classifiers;
 
+	/**
+	 * Simple 1-param constructor that instantiates factory variable
+	 * 
+	 * @param factory this generates meta/sub binary models
+	 */
 	public OVAClassifier(ClassifierFactory factory) {
 		this.factory = factory;
 	}
 
+	/**
+	 * Trains a number of models equal to the number of classes in the train
+	 * dataset. Each sub-model corresponds to a one label-vs-rest of the labels
+	 * classifier. These are stored in an arraylist for classification use later.
+	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void train(DataSet data) {
 		classifiers = new ArrayList<Classifier>();
@@ -49,20 +60,25 @@ public class OVAClassifier implements Classifier {
 			c.train(OVADataSet);
 			classifiers.add(c);
 			System.out.println("Done training classifier for label: " + labelIndex);
-			System.out.println(c);
+
+			if (labelIndex == 10) {
+				System.out.println(c);
+			}
 		}
 	}
 
+	/**
+	 * Classifies a data example by running it through each of the classifiers
+	 * created above. It returns the positive label with the highest confidence or
+	 * the predicted negative label with the lowest confidence.
+	 */
 	@Override
 	public double classify(Example example) {
 		double maxConfidence = -1, minConfidence = 47;
 		double labelIndex = -1;
 		boolean posPredMade = false;
 
-		// For each classifier, classify the provided example. Return the positive label
-		// predicted
-		// with the highest confidence or the negative label predicted with the lowest
-		// confidence
+		// For each classifier, classify the provided example
 		for (Classifier c : classifiers) {
 
 			double pred = c.classify(example);
@@ -96,19 +112,20 @@ public class OVAClassifier implements Classifier {
 
 	public static void main(String[] args) {
 		DataSet data = new DataSet("../assign5-starter/data/wines.train", DataSet.TEXTFILE);
-		ClassifierFactory factory = new ClassifierFactory(ClassifierFactory.DECISION_TREE, 5);
+		ClassifierFactory factory = new ClassifierFactory(ClassifierFactory.DECISION_TREE, 3);
 		OVAClassifier ova = new OVAClassifier(factory);
+//		ClassifierTimer.timeClassifier(ova, data, 1);
 		ova.train(data);
-
-		double correct = 0, total = 0;
-		for (Example e : data.getData()) {
-			total++;
-			if (ova.classify(e) == e.getLabel()) {
-				correct++;
-			}
-		}
-		System.out.println("accuracy: " + correct / total * 100);
-		System.out.println(correct);
-		System.out.println(total);
+//
+//		double correct = 0, total = 0;
+//		for (Example e : data.getData()) {
+//			total++;
+//			if (ova.classify(e) == e.getLabel()) {
+//				correct++;
+//			}
+//		}
+//		System.out.println("accuracy: " + correct / total * 100);
+//		System.out.println(correct);
+//		System.out.println(total);
 	}
 }
